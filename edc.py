@@ -81,4 +81,4 @@ ex = shap.KernelExplainer(f, X_train_summary)
 X_test = pd.DataFrame(data=X_test, columns=feat_names)
 
 shap_values = ex.shap_values(X_test.iloc[0:10, :])
-shap.summary_plot(shap_values, X_test.iloc[0:10, :])
+shap.summary_plot(shap_values, X_test.iloc[0:10, :],  plot_type='dot', show = False)
