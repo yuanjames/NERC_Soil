@@ -2,21 +2,21 @@ import imp
 from torch import nn, optim
 from torch.nn import functional as F
 import torch
-
+from sklearn.metrics import r2_score
 class Net(nn.Module):
-    def __init__(self):
+    def __init__(self, num_feats=8):
         super(Net, self).__init__()
 
         self.fc_layers = nn.Sequential(
-            nn.Linear(86, 100),
+            nn.Linear(num_feats, 50),
             nn.Sigmoid(),
-            nn.Linear(100, 200),
+            nn.Dropout(0.25),
+            nn.Linear(50, 100),
             nn.Sigmoid(),
-            nn.Linear(200, 64),
+            nn.Dropout(0.25),
+            nn.Linear(100, 15),
             nn.Sigmoid(),
-            nn.Linear(64, 32),
-            nn.Sigmoid(),
-            nn.Linear(32, 1),
+            nn.Linear(15, 1),
         )
 
     def forward(self, x):
@@ -37,19 +37,14 @@ def train(model, device, train_loader, optimizer, epoch):
                 epoch, batch_idx * len(data), len(train_loader.dataset),
                 100. * batch_idx / len(train_loader), loss.item()))
 
-# def test(model, device, test_loader):
-#     model.eval()
-#     test_loss = 0
-#     correct = 0
-#     with torch.no_grad():
-#         for data, target in test_loader:
-#             data, target = data.to(device), target.to(device)
-#             output = model(data)
-#             test_loss += F.mse_loss(output.log(), target).item() # sum up batch loss
-#             pred = output.max(1, keepdim=True)[1] # get the index of the max log-probability
-#             correct += pred.eq(target.view_as(pred)).sum().item()
-
-#     test_loss /= len(test_loader.dataset)
-#     print('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
-#         test_loss, correct, len(test_loader.dataset),
-#     100. * correct / len(test_loader.dataset)))
+def test(model, device, test_loader):
+    model.eval()
+    test_loss = 0
+    correct = 0
+    with torch.no_grad():
+        for data, target in test_loader:
+            data, target = data.to(device), target.to(device)
+            output = model(data)
+            test_loss += torch.sqrt(F.mse_loss(output, target)).item() # sum up batch loss
+    print('\nTest set: Average loss: {:.4f}\n'.format(
+        test_loss))
