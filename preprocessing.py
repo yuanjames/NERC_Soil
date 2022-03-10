@@ -43,8 +43,8 @@ def clean_data(
     feat_names,
     feature: str = "Elevation",
     to_drop=-9999.0,
-    to_replace_y: list = ["<0.05"],
-    value_y: list = [0.05],
+    to_replace_y: list = ["<0.01"],
+    value_y: list = [0.01],
 ):
     """
     User could call this function in extract_data function, this function is used to drop some undesirable data.

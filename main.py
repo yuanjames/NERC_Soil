@@ -8,7 +8,7 @@ import shap
 from torch.nn import functional as F
 
 # Part 1 data preprocessing
-X, y, feat_names= extraction_data(feature=[1, 9])
+X, y, feat_names= extraction_data(feature=[1, 9], task='PBDE 47')
 
 X = minmax_scale(X.values, axis=0)
 ssc = StandardScaler()
