@@ -10,11 +10,10 @@ from torch.nn import functional as F
 # Part 1 data preprocessing
 X, y, feat_names= extraction_data(feature=[1, 9], task='PBDE 47')
 
-X = minmax_scale(X.values, axis=0)
-ssc = StandardScaler()
-y  = y.values
+# X = minmax_scale(X.values, axis=0)
+# y  = y.values
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.05, random_state=0)
+X_train, X_test, y_train, y_test = train_test_split(minmax_scale(X.values, axis=0), y.values, test_size=0.05, random_state=0)
 
 
 X_train_tensor = torch.Tensor(X_train)
@@ -44,9 +43,13 @@ with torch.no_grad():
 def f(x):
     return model(torch.Tensor(x)).detach().numpy().reshape(-1)
 
+# plot 1
+# e = shap.DeepExplainer(model, X_train_tensor)
+# shap_values = e.shap_values(X_test_tensor)
+# shap.summary_plot(shap_values, X_test_tensor.numpy(), feature_names = feat_names)
 
-e = shap.DeepExplainer(model, X_train_tensor)
-shap_values = e.shap_values(X_test_tensor)
-shap.summary_plot(shap_values, X_test_tensor.numpy(), feature_names = feat_names)
-
-
+# plot 2
+explainer = shap.Explainer(f, X_train)
+shap_values = explainer(X)
+shap.plots.bar(shap_values)
+# shap.plots.heatmap(shap_values)
