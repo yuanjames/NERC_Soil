@@ -12,7 +12,7 @@ X, y, feat_names= extraction_data(feature=[1, 9])
 
 X = minmax_scale(X.values, axis=0)
 ssc = StandardScaler()
-y  = ssc.fit_transform(y.values.reshape(-1, 1))
+y  = y.values
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.05, random_state=0)
 
@@ -28,8 +28,8 @@ test_loader = DataLoader(TensorDataset(X_test_tensor, y_test_tensor), batch_size
 # Part 2 create NNs
 model = Net(num_feats =feat_names.shape[0])
 device = torch.device('cpu')
-optimizer = torch.optim.SGD(model.parameters(), lr=0.001)
-for epoch in range(1,  200):
+optimizer = torch.optim.SGD(model.parameters(), lr=0.02)
+for epoch in range(1,  350):
     train(model, device, train_loader, optimizer, epoch)
     # test(model, device, test_loader)
 

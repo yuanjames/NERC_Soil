@@ -3,19 +3,13 @@ from torch.nn import functional as F
 import torch
 from sklearn.metrics import r2_score
 class Net(nn.Module):
-    def __init__(self, num_feats=8):
+    def __init__(self, num_feats):
         super(Net, self).__init__()
 
         self.fc_layers = nn.Sequential(
-            nn.Linear(num_feats, 50),
+            nn.Linear(num_feats, 2*num_feats),
             nn.Sigmoid(),
-            nn.Dropout(0.25),
-            nn.Linear(50, 100),
-            nn.Sigmoid(),
-            nn.Dropout(0.25),
-            nn.Linear(100, 15),
-            nn.Sigmoid(),
-            nn.Linear(15, 1),
+            nn.Linear(2*num_feats, 1)
         )
 
     def forward(self, x):
