@@ -13,13 +13,13 @@ X, y, feat_names= extraction_data(feature=[1, 9], task='PBDE 47')
 # X = minmax_scale(X.values, axis=0)
 # y  = y.values
 
-X_train, X_test, y_train, y_test = train_test_split(minmax_scale(X.values, axis=0), y.values, test_size=0.05, random_state=0)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.05, random_state=0)
 
 
-X_train_tensor = torch.Tensor(X_train)
-y_train_tensor = torch.Tensor(y_train.reshape(-1, 1))
-X_test_tensor = torch.Tensor(X_test)
-y_test_tensor = torch.Tensor(y_test.reshape(-1, 1))
+X_train_tensor = torch.Tensor(X_train.values)
+y_train_tensor = torch.Tensor(y_train.values.reshape(-1, 1))
+X_test_tensor = torch.Tensor(X_test.values)
+y_test_tensor = torch.Tensor(y_test.values.reshape(-1, 1))
 
 train_loader = DataLoader(TensorDataset(X_train_tensor, y_train_tensor), batch_size=8, shuffle=True)
 test_loader = DataLoader(TensorDataset(X_test_tensor, y_test_tensor), batch_size=8, shuffle=True)
@@ -44,12 +44,12 @@ def f(x):
     return model(torch.Tensor(x)).detach().numpy().reshape(-1)
 
 # plot 1
-# e = shap.DeepExplainer(model, X_train_tensor)
-# shap_values = e.shap_values(X_test_tensor)
-# shap.summary_plot(shap_values, X_test_tensor.numpy(), feature_names = feat_names)
+e = shap.DeepExplainer(model, X_train_tensor)
+shap_values = e.shap_values(X_test_tensor)
+shap.summary_plot(shap_values, X_test_tensor.numpy(), feature_names = feat_names)
 
 # plot 2
-explainer = shap.Explainer(f, X_train)
-shap_values = explainer(X)
+explainer = shap.Explainer(f, X_train.values)
+shap_values = explainer(X_test)
 shap.plots.bar(shap_values)
-# shap.plots.heatmap(shap_values)
+shap.plots.heatmap(shap_values)

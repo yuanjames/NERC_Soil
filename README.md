@@ -29,14 +29,19 @@ RMSEs for 3 times repeated experiments: 0.192, 0.259, 0.299. Obvisouly,the perfo
 | *Figure 6. DEHP with 87 features -3* |
 
 
-RMSE is 0.179 for predicting PBDE 47. According to Fig.7, the feature 'Aspect2' is the most influential feature.
-| ![7](Figure_8_PBDE47_1.png) | 
+
+
+## Experiment 2
+Within first 8 features, 'Elevation' is the most influential factor for predicting PBDE47.
+
+| ![7](PBDE47_1.png) | 
 |:--:| 
 | *Figure 7. PBDE47* |
 
-| ![8](Figure_8_PBDE47_2.png) | 
+| ![8](PBDE47_2.png) | 
 |:--:| 
 | *Figure 8. PBDE47 Global importance of each feature by mean asolute value* |
 
-## Experiment 2
-
+| ![9](PBDE47_3.png) | 
+|:--:| 
+| *Figure 9. PBDE47 Heatmap* |
