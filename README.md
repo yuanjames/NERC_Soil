@@ -45,3 +45,11 @@ Within first 8 features, 'Elevation' is the most influential factor for predicti
 | ![9](PBDE47_3.png) | 
 |:--:| 
 | *Figure 9. PBDE47 Heatmap* |
+
+
+## Experiment 3
+Within first 18 features, 'Elevation' is the most influential factor for predicting PBDE47. However, we thought from the column 9 to 19 are categorical data, represented in one-hot encoding. Therefore, we sum those Shap values up as a single feature LandCoverXa. It is noted that the feature value of LandCoverXa in the Fig.10 is not referrable because this is categorical data.
+
+| ![9](onehot.png) | 
+|:--:| 
+| *Figure 10. PBDE47 Sum-up Shap Values for One-hot Encoding* |

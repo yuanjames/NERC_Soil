@@ -8,7 +8,7 @@ import shap
 from torch.nn import functional as F
 
 # Part 1 data preprocessing
-X, y, feat_names= extraction_data(feature=[1, 9], task='PBDE 47')
+X, y, feat_names= extraction_data(feature=[1, 19], task='PBDE 47')
 
 # X = minmax_scale(X.values, axis=0)
 # y  = y.values
@@ -46,10 +46,15 @@ def f(x):
 # plot 1
 e = shap.DeepExplainer(model, X_train_tensor)
 shap_values = e.shap_values(X_test_tensor)
-shap.summary_plot(shap_values, X_test_tensor.numpy(), feature_names = feat_names)
+print(type(shap_values))
+processed_shap_values = np.sum(shap_values[:,8::], axis=1)
+shap_values = shap_values[:, 0:9]
+shap_values[:, -1] = processed_shap_values
+feat_names[8] = 'LandCoverXa'
+shap.summary_plot(shap_values, X_test_tensor.numpy()[:, 0:9], feature_names = feat_names[0:9])
 
-# plot 2
-explainer = shap.Explainer(f, X_train.values)
-shap_values = explainer(X_test)
-shap.plots.bar(shap_values)
-shap.plots.heatmap(shap_values)
+# # plot 2
+# explainer = shap.Explainer(f, X_train.values)
+# shap_values = explainer(X_test)
+# shap.plots.bar(shap_values)
+# shap.plots.heatmap(shap_values)
